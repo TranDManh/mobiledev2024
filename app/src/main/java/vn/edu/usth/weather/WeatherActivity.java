@@ -19,8 +19,16 @@ public class WeatherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
         ForecastFragment firstFragment = new ForecastFragment(); // Create an instance of ForecastFragment
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, firstFragment).commit(); // Add the fragment to the container
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_forecast, firstFragment).commit(); // Add the fragment to the container
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+
+        WeatherFragment secondFragment = new WeatherFragment();
+        fragmentTransaction.replace(R.id.fragment_weather, secondFragment);
+        fragmentTransaction.addToBackStack(null);  // Optional: adds transaction to back stack
+        fragmentTransaction.commit();
 
         Log.i(TAG, "onCreate: Activity created");
     }
