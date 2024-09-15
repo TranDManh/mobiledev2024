@@ -2,33 +2,25 @@ package vn.edu.usth.weather;
 
 import android.os.Bundle;
 import android.util.Log;
-import androidx.activity.EdgeToEdge;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager2.widget.ViewPager2;
 
 
 public class WeatherActivity extends AppCompatActivity {
     private static final String TAG = "WeatherActivity";
+    private ViewPager2 viewPager2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
-        ForecastFragment firstFragment = new ForecastFragment(); // Create an instance of ForecastFragment
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_forecast, firstFragment).commit(); // Add the fragment to the container
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-
-        WeatherFragment secondFragment = new WeatherFragment();
-        fragmentTransaction.replace(R.id.fragment_weather, secondFragment);
-        fragmentTransaction.addToBackStack(null);  // Optional: adds transaction to back stack
-        fragmentTransaction.commit();
+        viewPager2 = findViewById(R.id.viewpager_2);
+        ViewPager2Adapter viewPager2Adapter = new ViewPager2Adapter(this);
+        viewPager2.setAdapter(viewPager2Adapter);
 
         Log.i(TAG, "onCreate: Activity created");
     }
