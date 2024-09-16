@@ -34,13 +34,13 @@ public class WeatherActivity extends AppCompatActivity {
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 switch (position){
                     case 0:
-                        tab.setText("Hanoi, VietNam");
+                        tab.setText(getString(R.string.place_1));
                         break;
                     case 1:
-                        tab.setText("Paris, France");
+                        tab.setText(getString(R.string.place_2));
                         break;
                     case 2:
-                        tab.setText("NewYork, America");
+                        tab.setText(getString(R.string.place_3));
                         break;
                 }
             }
