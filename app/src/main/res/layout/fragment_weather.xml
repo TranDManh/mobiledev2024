@@ -14,18 +14,18 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#67eb34"
-        android:padding="20dp">
+        android:background="@color/green"
+        android:padding="@dimen/layout">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="12C\nCloudy"
-            android:textSize="20dp"
+            android:text="@string/city_weather_1"
+            android:textSize="@dimen/size_1"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"/>
 
         <ImageView
-            android:layout_width="150dp"
+            android:layout_width="@dimen/width_3"
             android:layout_height="match_parent"
             android:src="@drawable/weather_icon"
             android:adjustViewBounds="true"
@@ -35,8 +35,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Paris"
-            android:textSize="16dp"
+            android:text="@string/city_2"
+            android:textSize="@dimen/size_2"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"/>
     </RelativeLayout>

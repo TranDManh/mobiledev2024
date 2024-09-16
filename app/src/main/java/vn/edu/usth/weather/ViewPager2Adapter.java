@@ -21,8 +21,10 @@ public class ViewPager2Adapter extends FragmentStateAdapter {
                 return new WeatherAndForecastFragment_2();
             case 2:
                 return new WeatherAndForecastFragment_3();
+            default:
+                return new WeatherAndForecastFragment_1();
         }
-        return null;
+
     }
 
     @Override

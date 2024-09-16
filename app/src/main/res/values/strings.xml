@@ -1,5 +1,25 @@
 <resources>
     <string name="app_name">USTH Weather</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="place_1">HaNoi, VietNam</string>
+    <string name="place_2">Paris, France</string>
+    <string name="place_3">NewYork, America</string>
+    <string name="day_1">Monday</string>
+    <string name="day_2">Tuesday</string>
+    <string name="day_3">Wednesday</string>
+    <string name="day_4">Thursday</string>
+    <string name="day_5">Friday</string>
+    <string name="day_6">Saturday</string>
+    <string name="day_7">Sunday</string>'
+    <string name="weather_1">Partly Cloudy\n24C-30C</string>
+    <string name="weather_2">Showers\n24C-31C</string>
+    <string name="weather_3">Scattered Showers\n22C-27C</string>
+    <string name="weather_4">Rain\n22C-23C</string>
+    <string name="weather_5">Thunderstorms\n25C-28C</string>
+    <string name="city_1">Hanoi</string>
+    <string name="city_2">Paris</string>
+    <string name="city_3">NewYork</string>
+    <string name="city_weather_1">12C\nCloundy</string>
+    <string name="city_weather_2">23C\nRain</string>
+    <string name="city_weather_3">21C\nStorm</string>
 </resources>

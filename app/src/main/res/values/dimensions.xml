@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="layout">20dp</dimen>
+    <dimen name="size_1">20dp</dimen>
+    <dimen name="size_2">16dp</dimen>
+    <dimen name="layout_2">4dp</dimen>
+    <dimen name="width">30dp</dimen>
+    <dimen name="width_2">50dp</dimen>
+    <dimen name="width_3">150dp</dimen>
+</resources>

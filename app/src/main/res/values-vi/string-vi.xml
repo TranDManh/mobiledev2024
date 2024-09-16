@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">USTH Thời tiết</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="place_1">Hà Nội, Việt Nam</string>
+    <string name="place_2">Paris, Pháp</string>
+    <string name="place_3">NewYork, Hoa Kỳ</string>
+    <string name="day_1">Thứ Hai</string>
+    <string name="day_2">Thứ Ba</string>
+    <string name="day_3">Thứ Tư</string>
+    <string name="day_4">Thứ Năm</string>
+    <string name="day_5">Thứ Sáu</string>
+    <string name="day_6">Thứ Bảy</string>
+    <string name="day_7">Chủ Nhật</string>'
+    <string name="weather_1">Có mây\n24C-30C</string>
+    <string name="weather_2">Mưa rào\n24C-31C</string>
+    <string name="weather_3">Mưa rải rác\n22C-27C</string>
+    <string name="weather_4">Mưa\n22C-23C</string>
+    <string name="weather_5">Giông lốc\n25C-28C</string>
+    <string name="city_1">Hà Nội</string>
+    <string name="city_2">Paris</string>
+    <string name="city_3">NewYork</string>
+    <string name="city_weather_1">12C\nCó mây</string>
+    <string name="city_weather_2">23C\nMưa</string>
+    <string name="city_weather_3">21C\nBão</string>
+</resources>
