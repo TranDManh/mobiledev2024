@@ -3,9 +3,15 @@ package vn.edu.usth.weather;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
@@ -30,6 +36,9 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         try (InputStream is = getResources().openRawResource(R.raw.if_2_beat);
              OutputStream os = new FileOutputStream(new File(getFilesDir(),"if_2_beat.mp3")))
@@ -76,6 +85,25 @@ public class WeatherActivity extends AppCompatActivity {
 
 
         Log.i(TAG, "onCreate: Activity created");
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem menuItem){
+        int id = menuItem.getItemId();
+        if (id == R.id.refesh){
+            Toast.makeText(this, "Refresh", Toast.LENGTH_SHORT).show();
+        }
+        if(id == R.id.setting){
+            Toast.makeText(this,"Setting", Toast.LENGTH_SHORT).show();
+        }
+        return true;
     }
 
         @Override
