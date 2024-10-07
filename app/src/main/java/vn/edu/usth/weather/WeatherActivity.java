@@ -2,6 +2,9 @@ package vn.edu.usth.weather;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,10 +35,40 @@ public class WeatherActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager2 viewPager2;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
+        final Handler handler = new Handler(Looper.getMainLooper()){
+            @Override
+            public void handleMessage(Message msg){
+                String content = msg.getData().getString("server_response");
+                Toast.makeText(WeatherActivity.this, content, Toast.LENGTH_SHORT).show();
+            }
+        };
+
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+
+                    Thread.sleep(5000);
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                Bundle bundle = new Bundle();
+                bundle.putString("server_response", "some sample json here");
+
+                Message msg = new Message();
+                msg.setData(bundle);
+                handler.sendMessage(msg);
+            }
+        });
+        t.start();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
