@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import android.os.AsyncTask;
 
 
 import androidx.annotation.NonNull;
@@ -41,34 +42,33 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
-        final Handler handler = new Handler(Looper.getMainLooper()){
+
+        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
+
             @Override
-            public void handleMessage(Message msg){
-                String content = msg.getData().getString("server_response");
-                Toast.makeText(WeatherActivity.this, content, Toast.LENGTH_SHORT).show();
+            protected void onPreExecute() {
+
+            }
+
+            @Override
+            protected String doInBackground(Void... voids) {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return "Simulated network response";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                // Display the result in a Toast
+                Toast.makeText(WeatherActivity.this, result, Toast.LENGTH_SHORT).show();
             }
         };
 
-
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-
-                    Thread.sleep(5000);
-                }
-                catch (InterruptedException e){
-                    e.printStackTrace();
-                }
-                Bundle bundle = new Bundle();
-                bundle.putString("server_response", "some sample json here");
-
-                Message msg = new Message();
-                msg.setData(bundle);
-                handler.sendMessage(msg);
-            }
-        });
-        t.start();
+        // Execute the AsyncTask
+        task.execute();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
