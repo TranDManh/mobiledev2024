@@ -1,6 +1,13 @@
 package vn.edu.usth.weather;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.os.AsyncTask;
 
@@ -29,6 +37,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 public class WeatherActivity extends AppCompatActivity {
@@ -43,32 +54,7 @@ public class WeatherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
 
-        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
-
-            @Override
-            protected void onPreExecute() {
-
-            }
-
-            @Override
-            protected String doInBackground(Void... voids) {
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return "Simulated network response";
-            }
-
-            @Override
-            protected void onPostExecute(String result) {
-                // Display the result in a Toast
-                Toast.makeText(WeatherActivity.this, result, Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        // Execute the AsyncTask
-        task.execute();
+        new DownloadImage().execute("https://usth.edu.vn/wp-content/uploads/2021/11/logo.png");
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -118,7 +104,99 @@ public class WeatherActivity extends AppCompatActivity {
 
 
         Log.i(TAG, "onCreate: Activity created");
+
+        if (isInternetAvailable()) {
+            Toast.makeText(this, "Internet is available", Toast.LENGTH_SHORT).show();
+            // Proceed with network operations
+        } else {
+            Toast.makeText(this, "Internet is not available", Toast.LENGTH_SHORT).show();
+            // Handle the lack of Internet access (e.g., show an error message)
+        }
+
     }
+
+    private boolean isInternetAvailable() {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (connectivityManager != null) {
+            // For devices running API level 21 and higher
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+                return networkCapabilities != null &&
+                        (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                                networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR));
+            } else {
+                // For devices running lower than API level 21
+                android.net.NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+            }
+        }
+
+        return false; // Return false if the connectivity manager is null
+    }
+
+
+
+    private class DownloadImage extends AsyncTask<String,Integer, Bitmap> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Toast.makeText(WeatherActivity.this, "Starting refresh...", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            Bitmap bitmap = null;
+            try {
+                URL url = new URL(params[0]);
+// Make a request to server
+                HttpURLConnection connection =
+                        (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setDoInput(true);
+// allow reading response code and response dataconnection.
+                connection.connect();
+// Receive response
+                int response = connection.getResponseCode();
+                Log.i("USTHWeather", "The response is: " + response);
+                if (response == HttpURLConnection.HTTP_OK) { // Check if the connection was successful
+                    InputStream is = connection.getInputStream();
+                    bitmap = BitmapFactory.decodeStream(is);
+                    is.close(); // Close the InputStream
+                } else {
+                    Log.e("DownloadImageTask", "Error in connection: " + response);
+                }
+                connection.disconnect();
+            } catch (MalformedURLException e){
+                Log.e("DownloadImageTask", "Malformed URL: " + e.getMessage());
+                e.printStackTrace();
+            }catch (IOException e) {
+                Log.e("DownloadImageTask", "IOException: " + e.getMessage());
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            ImageView logo = (ImageView) findViewById(R.id.logo);
+            if (bitmap != null) {
+                logo.setImageBitmap(bitmap);
+                Toast.makeText(WeatherActivity.this, "Network connected", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(WeatherActivity.this, "Failed to download image", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    // Execute the AsyncTask
 
 
     @Override

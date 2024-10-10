@@ -1,10 +1,12 @@
 package vn.edu.usth.weather;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,8 @@ import androidx.core.content.ContextCompat;
  * create an instance of this fragment.
  */
 public class ForecastFragment extends Fragment {
+
+    private ImageView logoImageView;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -64,8 +68,16 @@ public class ForecastFragment extends Fragment {
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_forecast, container, false);
+        logoImageView = view.findViewById(R.id.logo);
+        return view;
+    }
 
-        return inflater.inflate(R.layout.fragment_forecast, container, false);
+    public void setLogoImage(Bitmap bitmap) {
+        if (logoImageView != null && bitmap != null) {
+            logoImageView.setImageBitmap(bitmap);
+        } else {
+            Log.e("ForecastFragment", "Failed to set logo image: Bitmap is null");
+        }
     }
 }
