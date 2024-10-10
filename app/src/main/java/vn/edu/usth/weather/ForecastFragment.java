@@ -56,6 +56,10 @@ public class ForecastFragment extends Fragment {
         return fragment;
     }
 
+    public static void updateLogo(Bitmap response) {
+
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,11 +77,4 @@ public class ForecastFragment extends Fragment {
         return view;
     }
 
-    public void setLogoImage(Bitmap bitmap) {
-        if (logoImageView != null && bitmap != null) {
-            logoImageView.setImageBitmap(bitmap);
-        } else {
-            Log.e("ForecastFragment", "Failed to set logo image: Bitmap is null");
-        }
-    }
 }

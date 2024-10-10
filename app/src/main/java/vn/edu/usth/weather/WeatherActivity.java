@@ -18,7 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
-import android.os.AsyncTask;
+
 
 
 import androidx.annotation.NonNull;
@@ -27,6 +27,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.Volley;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -46,6 +53,7 @@ public class WeatherActivity extends AppCompatActivity {
     private static final String TAG = "WeatherActivity";
     private TabLayout tabLayout;
     private ViewPager2 viewPager2;
+    private ImageView logo;
 
 
 
@@ -54,7 +62,7 @@ public class WeatherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
 
-        new DownloadImage().execute("https://usth.edu.vn/wp-content/uploads/2021/11/logo.png");
+        downloadLogo("https://usth.edu.vn/wp-content/uploads/2021/11/logo.png");
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -138,66 +146,39 @@ public class WeatherActivity extends AppCompatActivity {
 
 
 
-    private class DownloadImage extends AsyncTask<String,Integer, Bitmap> {
+    private void downloadLogo(String url) {
+        // Create an ImageRequest to fetch the image
+        ImageRequest imageRequest = new ImageRequest(url,
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        ForecastFragment.updateLogo(response); // Assuming you have a method to update the logo
+                        showToast("Logo downloaded successfully!");
+                    }
+                },
+                0, // Width
+                0, // Height
+                ImageView.ScaleType.CENTER_CROP,
+                Bitmap.Config.ARGB_8888,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, "Failed to download logo.", error);
+                        showToast("Failed to download logo. Please try again.");
+                    }
+                });
+        // Add the request to the RequestQueue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(imageRequest);
+    }
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Toast.makeText(WeatherActivity.this, "Starting refresh...", Toast.LENGTH_SHORT).show();
-        }
 
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            Bitmap bitmap = null;
-            try {
-                URL url = new URL(params[0]);
-// Make a request to server
-                HttpURLConnection connection =
-                        (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                connection.setDoInput(true);
-// allow reading response code and response dataconnection.
-                connection.connect();
-// Receive response
-                int response = connection.getResponseCode();
-                Log.i("USTHWeather", "The response is: " + response);
-                if (response == HttpURLConnection.HTTP_OK) { // Check if the connection was successful
-                    InputStream is = connection.getInputStream();
-                    bitmap = BitmapFactory.decodeStream(is);
-                    is.close(); // Close the InputStream
-                } else {
-                    Log.e("DownloadImageTask", "Error in connection: " + response);
-                }
-                connection.disconnect();
-            } catch (MalformedURLException e){
-                Log.e("DownloadImageTask", "Malformed URL: " + e.getMessage());
-                e.printStackTrace();
-            }catch (IOException e) {
-                Log.e("DownloadImageTask", "IOException: " + e.getMessage());
-                e.printStackTrace();
-            }
-            return bitmap;
-        }
+    private void showToast(String message) {
+        Toast.makeText(WeatherActivity.this, message, Toast.LENGTH_SHORT).show();
+    }
+    private void showAlertDialog(String title, String message) {
 
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            ImageView logo = (ImageView) findViewById(R.id.logo);
-            if (bitmap != null) {
-                logo.setImageBitmap(bitmap);
-                Toast.makeText(WeatherActivity.this, "Network connected", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(WeatherActivity.this, "Failed to download image", Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-
-    // Execute the AsyncTask
-
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -210,6 +191,7 @@ public class WeatherActivity extends AppCompatActivity {
         int id = menuItem.getItemId();
         if (id == R.id.refesh){
             Toast.makeText(this, "Refresh", Toast.LENGTH_SHORT).show();
+            downloadLogo("https://usth.edu.vn/wp-content/uploads/2021/11/logo.png");
         }
         if(id == R.id.setting){
             Toast.makeText(this,"Setting", Toast.LENGTH_SHORT).show();
